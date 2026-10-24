@@ -2,6 +2,19 @@
 
 This repository contains my work for both assignment tasks. **Task 1** focuses on studying and improving the hostel-leave process at ICFAI, while **Task 2** examines the B.Tech Data Science and Artificial Intelligence curriculum for the 2023 admission batch.
 
+## Reviewed revision
+- Release: https://github.com/arshiatasneem/icfai-workflow-curriculum-assignment/releases/tag/v1.0
+- Commit: (https://github.com/arshiatasneem/icfai-workflow-curriculum-assignment/commit/8006c5fbbbb4601b928ce5a851494a411cb0efcf)
+
+## Reports
+- [Task 1 report](Task-1-College-Workflow/report.md)
+- [Task 2 report](Task-2-Curriculum-Audit/report.md)
+
+## Evidence
+- [AI-use record](evidence/ai-use-record.md)
+- [Individual contribution](evidence/individual-contribution.md)
+- [Limitations](evidence/limitations.md)
+
 ## Repository Contents
 
 - **[Task 1: College Workflow](Task-1-College-Workflow/README.md)** — Analysis of the existing hostel-leave process, proposed workflow improvements, synthetic test cases, and estimated time savings.
