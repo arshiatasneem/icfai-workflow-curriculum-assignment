@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Interactive Curriculum Audit</title>
+<style>
+body{font:16px/1.5 system-ui,sans-serif;max-width:1100px;margin:24px auto;padding:0 16px;color:#1d2735;background:#f5f7fb}
+header,.panel{padding:20px;border-radius:12px;margin:16px 0}header{background:#17345c;color:white} .panel{background:white;border:1px solid #d6dfeb}
+.notice{background:#fff2cf;padding:12px;border-left:4px solid #d49b00} .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:12px}
+.kpi{font-size:1.6rem;font-weight:700}label{display:block;font-weight:600;margin:8px 0 4px}input,select{font:inherit;padding:8px;border:1px solid #aab8ca;border-radius:6px;width:100%;box-sizing:border-box}
+.controls{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px}table{border-collapse:collapse;width:100%;margin-top:14px;background:white}th,td{border-bottom:1px solid #dbe2ec;text-align:left;padding:10px;vertical-align:top}th{background:#eaf0f8}button{padding:10px 14px;background:#2458a6;color:white;border:0;border-radius:6px;cursor:pointer;margin-top:12px}.muted{color:#596a80;font-size:.92rem}
+</style></head><body>
+<header><h1>Interactive Curriculum Audit</h1><p>B.Tech CSE (AI & Data Science) · 2023 admission batch · Student proposal for 2030 readiness</p></header>
+<div class="notice"><strong>Important:</strong> This is a planning aid, not an official ICFAI syllabus. The total of 166 credits is the figure supplied for this audit. Verify the applicable 2023-batch course map and elective alternatives before treating course codes, semester placements, or affected-credit counts as official.</div>
+<div class="grid">
+<div class="panel"><h3>Programme credits</h3><div class="kpi" id="totalKpi">166</div><div class="muted">User-provided total</div></div>
+<div class="panel"><h3>20–25% target</h3><div class="kpi" id="targetKpi">33.2–41.5</div><div class="muted">Credits affected</div></div>
+<div class="panel"><h3>Affected credits</h3><div class="kpi" id="affectedKpi">35</div><div class="muted">Provisional proposal</div></div>
+<div class="panel"><h3>Share affected</h3><div class="kpi" id="shareKpi">21.08%</div><div class="muted" id="status">Within target if the affected-credit count is validated</div></div>
+</div>
+<section class="panel"><h2>Credit calculator</h2><div class="controls">
+<div><label for="total">Total programme credits</label><input id="total" type="number" min="1" value="166"></div>
+<div><label for="affected">Credits affected by redesign</label><input id="affected" type="number" min="0" value="35"></div>
+<div><label for="low">Lower target (%)</label><input id="low" type="number" min="0" max="100" value="20"></div>
+<div><label for="high">Upper target (%)</label><input id="high" type="number" min="0" max="100" value="25"></div></div>
+<p class="kpi" id="result" aria-live="polite"></p><p class="muted">Count each credit only once. Assessment changes within an existing course do not add credits. Keep the programme total balanced unless an approved scheme allows otherwise.</p></section>
+<section class="panel"><h2>Filter proposed course changes</h2><div class="controls">
+<div><label for="sem">Semester</label><select id="sem"><option value="all">All semesters</option><option>III</option><option>IV</option><option>V</option><option>VI</option><option>Elective</option></select></div>
+<div><label for="decision">Decision</label><select id="decision"><option value="all">All decisions</option><option>UPDATE</option><option>ADD / conditional substitution</option></select></div>
+<div><label for="search">Search</label><input id="search" type="search" placeholder="Search course or proposal"></div></div>
+<p class="muted" id="count"></p><div style="overflow-x:auto"><table><thead><tr><th>Semester</th><th>Course (provisional)</th><th>Credits counted</th><th>Decision</th><th>Proposal</th></tr></thead><tbody id="rows"></tbody></table></div>
+<p class="muted">This is a proposal shortlist, not a complete official course catalogue. Verify course codes, titles, credits, and semester placements for your admission batch.</p><button id="reset">Reset</button></section>
+<footer class="muted">To use the interactivity, download this HTML and open it in a browser. GitHub's ordinary file preview may display source instead of running the page; GitHub Pages can publish it as a webpage.</footer>
+<script>
+const data=[
+["III","DS202 Database Management Systems",4,"UPDATE","Integrity constraints, SQL validation, data quality and migration tests."],
+["III","DS205 Operating Systems",4,"UPDATE","Concurrency, synchronisation, debugging and failure diagnosis."],
+["IV","DS204 Design and Analysis of Algorithms",3,"UPDATE","Complexity, edge cases, test design and empirical comparisons."],
+["IV","DS212 Machine Learning",4,"UPDATE","Baselines, leakage checks, metrics and error analysis."],
+["V","DS302 Computer Networks",4,"UPDATE","API/network failure diagnosis and protocol trade-offs."],
+["V","DS305 Data Wrangling and Visualization",3,"UPDATE","Data-quality checks, reproducible transformations and truthful visualisation."],
+["VI","DS308 Big Data Systems",3,"UPDATE","Pipeline validation, lineage, monitoring and recovery."],
+["VI","DS310 Deep Learning",4,"UPDATE","Experiment comparisons, reproducibility and model limitations."],
+["VI","SP301 Special Project (host course unconfirmed)",3,"UPDATE","Testing, provenance, access control and reproducible demonstration."],
+["Elective","Data Integration Tools or approved equivalent (proposed)",3,"ADD / conditional substitution","Same-credit elective substitution only, subject to regulations and faculty approval."]
+];
+function calc(){let t=Math.max(0,+document.querySelector("#total").value||0),a=Math.max(0,+document.querySelector("#affected").value||0),l=Math.max(0,+document.querySelector("#low").value||0),h=Math.max(l,+document.querySelector("#high").value||0),p=t?100*a/t:0;
+document.querySelector("#totalKpi").textContent=t;document.querySelector("#targetKpi").textContent=(t*l/100).toFixed(1)+"–"+(t*h/100).toFixed(1);document.querySelector("#affectedKpi").textContent=a;document.querySelector("#shareKpi").textContent=p.toFixed(2)+"%";
+let ok=t>0&&p>=l&&p<=h;document.querySelector("#status").textContent=ok?"Within target if affected credits are validated":"Outside target range; validate values before changing the proposal";document.querySelector("#result").textContent=p.toFixed(2)+"% affected ("+a+" of "+t+" credits)";document.querySelector("#result").style.color=ok?"#17643a":"#9b2c2c";}
+function render(){let s=document.querySelector("#sem").value,d=document.querySelector("#decision").value,q=document.querySelector("#search").value.toLowerCase().trim();let f=data.filter(r=>(s==="all"||r[0]===s)&&(d==="all"||r[3]===d)&&r.join(" ").toLowerCase().includes(q));document.querySelector("#count").textContent="Showing "+f.length+" of "+data.length+" proposed change rows";let tbody=document.querySelector("#rows");tbody.replaceChildren();if(!f.length){let tr=document.createElement("tr"),td=document.createElement("td");td.colSpan=5;td.textContent="No matching rows.";tr.append(td);tbody.append(tr);return;}f.forEach(r=>{let tr=document.createElement("tr");r.forEach(v=>{let td=document.createElement("td");td.textContent=v;tr.append(td)});tbody.append(tr)});}
+["#total","#affected","#low","#high"].forEach(s=>document.querySelector(s).addEventListener("input",calc));["#sem","#decision"].forEach(s=>document.querySelector(s).addEventListener("change",render));document.querySelector("#search").addEventListener("input",render);
+document.querySelector("#reset").addEventListener("click",()=>{document.querySelector("#total").value=166;document.querySelector("#affected").value=35;document.querySelector("#low").value=20;document.querySelector("#high").value=25;document.querySelector("#sem").value="all";document.querySelector("#decision").value="all";document.querySelector("#search").value="";calc();render();});calc();render();
+</script></body></html>
